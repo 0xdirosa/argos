@@ -42,7 +42,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
       }
       if (jobsRes.ok) {
         const j = await jobsRes.json()
-        setJobs(j)
+        setJobs(j.jobs ?? j ?? [])
       }
     } catch {
       // silent

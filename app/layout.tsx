@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Toast from "./components/Toast";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Argos — x402-Native On-Chain Intelligence",
   description: "AI-powered on-chain analysis agent for Arc Testnet. Pay-per-query via x402 micropayments.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({
@@ -29,7 +31,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
         <Toast />
       </body>
     </html>

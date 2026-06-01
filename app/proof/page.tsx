@@ -23,7 +23,7 @@ export default function ProofPage() {
     fetch('/api/jobs?status=COMPLETED')
       .then((r) => r.json())
       .then((data) => {
-        setJobs(Array.isArray(data) ? data : [])
+        setJobs(Array.isArray(data) ? data : (data.jobs ?? []))
         setLoading(false)
       })
       .catch(() => setLoading(false))

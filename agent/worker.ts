@@ -8,10 +8,15 @@ dotenv.config({ path: resolve(__dirname, '../.env.local') })
 import { createAdminClient } from '../lib/supabase/admin'
 import { runAnalysis } from '../lib/agent/pipeline'
 
+let running = true
+
+process.on('SIGINT', () => { console.log(`[worker] SIGINT received, shutting down...`); running = false })
+process.on('SIGTERM', () => { console.log(`[worker] SIGTERM received, shutting down...`); running = false })
+
 async function poll() {
   console.log(`[worker] Starting poll loop at ${new Date().toISOString()}`)
 
-  while (true) {
+  while (running) {
     try {
       const supabase = createAdminClient()
 
@@ -48,8 +53,11 @@ async function poll() {
       console.error(`[worker] Poll cycle error:`, err)
     }
 
+    if (!running) break
     await new Promise((r) => setTimeout(r, 5000))
   }
+
+  console.log(`[worker] Poll loop exited at ${new Date().toISOString()}`)
 }
 
 poll().catch((err) => {
