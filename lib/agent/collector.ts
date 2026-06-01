@@ -1,4 +1,4 @@
-import { arcPublicClient } from '@/lib/circle/client'
+import { arcPublicClient } from '../circle/client'
 import { createPublicClient, http, keccak256 } from 'viem'
 import { mainnet } from 'viem/chains'
 

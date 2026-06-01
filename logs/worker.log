@@ -1,19 +1,2 @@
-[worker] Starting poll loop at 2026-06-01T09:40:42.145Z
-[worker] Starting poll loop at 2026-06-01T09:40:57.594Z
-/home/ubuntu/projects/argos/node_modules/groq-sdk/src/client.ts:178
-      throw new Errors.GroqError(
-            ^
-
-GroqError: The GROQ_API_KEY environment variable is missing or empty; either provide it, or instantiate the Groq client with an apiKey option, like new Groq({ apiKey: 'My API Key' }).
-    at new Groq (/home/ubuntu/projects/argos/node_modules/groq-sdk/src/client.ts:178:13)
-    at Groq (/home/ubuntu/projects/argos/lib/agent/reasoner.ts:3:14)
-    at Object.<anonymous> (/home/ubuntu/projects/argos/lib/agent/reasoner.ts:49:23)
-    at Module._compile (node:internal/modules/cjs/loader:1781:14)
-    at Object.transformer (/home/ubuntu/projects/argos/node_modules/tsx/dist/register-BOkp8V6j.cjs:9:3176)
-    at Module.load (node:internal/modules/cjs/loader:1505:32)
-    at Function._load (node:internal/modules/cjs/loader:1309:12)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
-    at Module.require (node:internal/modules/cjs/loader:1527:12)
-    at require (node:internal/modules/helpers:147:16)
-
-Node.js v22.22.3
+◇ injected env (17) from ../argos/.env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[worker] Starting poll loop at 2026-06-01T17:01:14.997Z

@@ -1,9 +1,9 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createAdminClient } from '../supabase/admin'
 import { collectData } from './collector'
 import { reasonAboutData } from './reasoner'
 import { validateResult } from './validator'
 import { storeResultHash } from './storer'
-import { failJobOnChain } from '@/lib/arc/contract'
+import { failJobOnChain } from '../arc/contract'
 
 type JobRow = {
   id: string

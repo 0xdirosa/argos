@@ -1,4 +1,4 @@
-import { settleJobOnChain } from '@/lib/arc/contract'
+import { settleJobOnChain } from '../arc/contract'
 
 export type StoreResult = {
   txHash: string | undefined

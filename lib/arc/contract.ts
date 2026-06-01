@@ -1,5 +1,5 @@
 import { keccak256, toHex } from 'viem'
-import { walletsClient, arcPublicClient, waitTxComplete } from '@/lib/circle/client'
+import { walletsClient, arcPublicClient, waitTxComplete } from '../circle/client'
 import crypto from 'crypto'
 
 const ArgosABI = [
