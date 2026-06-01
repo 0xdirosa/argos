@@ -44,16 +44,25 @@ export default function JobResult({
   jobId,
   onDone,
   onNewAnalysis,
+  isDemo,
 }: {
   jobId: string
   onDone?: () => void
   onNewAnalysis?: () => void
+  isDemo?: boolean
 }) {
   const [data, setData] = useState<JobResultData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const prevStatus = useRef<string | null>(null)
 
   useEffect(() => {
+    if (isDemo) {
+      fetch('/api/demo').then(r => r.ok ? r.json() : null).then(j => {
+        if (j) { setData(j); onDone?.() }
+      }).catch(() => setError('Demo data unavailable'))
+      return
+    }
+
     let cancelled = false
 
     async function poll() {
@@ -81,7 +90,7 @@ export default function JobResult({
 
     poll()
     return () => { cancelled = true }
-  }, [jobId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [jobId, isDemo]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (error) {
     return (
