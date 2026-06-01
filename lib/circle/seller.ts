@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { keccak256, toHex } from 'viem'
 
 const ARC_TESTNET_NETWORK = 'eip155:5042002'
 const ARC_TESTNET_USDC = '0x3600000000000000000000000000000000000000'
@@ -65,7 +64,7 @@ export function create402Response(priceUsdc: number, resourcePath: string): Next
 export async function requireX402Payment(
   request: NextRequest,
   priceUsdc: number = parseFloat(process.env.PRICE_PER_ANALYSIS ?? '0.50'),
-  resourcePath: string = '/api/jobs/analyze',
+  _resourcePath: string = '/api/jobs/analyze',
 ): Promise<{ paid: false } | { paid: true; amountPaid: number; payer: string }> {
   const paymentSignature = request.headers.get('payment-signature')
 

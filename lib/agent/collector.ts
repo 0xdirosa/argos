@@ -1,5 +1,5 @@
 import { arcPublicClient } from '@/lib/circle/client'
-import { createPublicClient, http } from 'viem'
+import { createPublicClient, http, keccak256 } from 'viem'
 import { mainnet } from 'viem/chains'
 
 const ethPublicClient = createPublicClient({
@@ -50,7 +50,7 @@ export async function collectData(input: CollectorInput): Promise<RawData> {
         ethPublicClient.getBytecode({ address }).catch(() => undefined),
       ])
       base.isContract = (code && code !== '0x') || (ethCode && ethCode !== '0x')
-      if (code && code !== '0x') base.codeHash = keccak256(code as `0x${string}`).slice(0, 18)
+      if (code && code !== '0x') base.codeHash = keccak256Hash(code as `0x${string}`).slice(0, 18)
 
       try {
         const cg = await fetch(
@@ -64,7 +64,7 @@ export async function collectData(input: CollectorInput): Promise<RawData> {
             base.priceChange24h = entry.usd_24h_change
           }
         }
-      } catch {
+      } catch (_) {
         // coingecko failure is non-critical
       }
     }
@@ -73,7 +73,7 @@ export async function collectData(input: CollectorInput): Promise<RawData> {
       const code = await arcPublicClient.getBytecode({ address }).catch(() => undefined)
       if (code && code !== '0x') {
         base.isContract = true
-        base.codeHash = keccak256(code as `0x${string}`).slice(0, 18)
+        base.codeHash = keccak256Hash(code as `0x${string}`).slice(0, 18)
 
         const dangerous = [
           'selfdestruct', 'delegatecall', 'callcode',
@@ -95,8 +95,6 @@ export async function collectData(input: CollectorInput): Promise<RawData> {
   return base
 }
 
-function keccak256(data: `0x${string}`): string {
-  // imported inline to avoid circular
-  const { keccak256: k } = require('viem')
-  return k(data)
+function keccak256Hash(data: `0x${string}`): string {
+  return keccak256(data)
 }

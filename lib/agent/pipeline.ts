@@ -3,7 +3,7 @@ import { collectData } from './collector'
 import { reasonAboutData } from './reasoner'
 import { validateResult } from './validator'
 import { storeResultHash } from './storer'
-import { failJobOnChain, getJobFromChain } from '@/lib/arc/contract'
+import { failJobOnChain } from '@/lib/arc/contract'
 
 type JobRow = {
   id: string
