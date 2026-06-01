@@ -69,7 +69,14 @@ export async function POST(request: NextRequest) {
         .update({ arc_tx_hash: txHash })
         .eq('id', jobId)
     } catch (chainErr) {
-      console.error(`[POST /api/analyze] createJobOnChain failed for ${jobId}:`, chainErr)
+      const msg = chainErr instanceof Error ? chainErr.message : String(chainErr)
+      console.error(`[POST /api/analyze] createJobOnChain failed for ${jobId}:`, msg)
+      await supabase.from('jobs').update({
+        status: 'FAILED',
+        error_msg: `On-chain job creation failed: ${msg.slice(0, 200)}`,
+        completed_at: new Date().toISOString(),
+      }).eq('id', jobId)
+      return NextResponse.json({ error: 'On-chain job creation failed' }, { status: 502 })
     }
 
     const response = NextResponse.json(

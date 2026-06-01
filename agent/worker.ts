@@ -1,4 +1,10 @@
-import 'dotenv/config'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
+import dotenv from 'dotenv'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+dotenv.config({ path: resolve(__dirname, '../.env.local') })
+
 import { createAdminClient } from '../lib/supabase/admin'
 import { runAnalysis } from '../lib/agent/pipeline'
 
@@ -9,19 +15,26 @@ async function poll() {
     try {
       const supabase = createAdminClient()
 
-      const { data: jobs, error } = await supabase
+      const { data: job, error } = await supabase
         .from('jobs')
         .select('id')
         .eq('status', 'QUEUED')
         .order('created_at', { ascending: true })
-        .limit(5)
+        .limit(1)
+        .single()
 
-      if (error) {
+      if (error && error.code !== 'PGRST116') {
         console.error(`[worker] Query error:`, error)
-      } else if (jobs && jobs.length > 0) {
-        console.log(`[worker] Found ${jobs.length} queued job(s)`)
+      } else if (job) {
+        const claimed = await supabase
+          .from('jobs')
+          .update({ status: 'PROCESSING' })
+          .eq('id', job.id)
+          .eq('status', 'QUEUED')
+          .select()
+          .single()
 
-        for (const job of jobs) {
+        if (claimed.data) {
           console.log(`[worker] Processing job ${job.id}...`)
           try {
             await runAnalysis(job.id)
