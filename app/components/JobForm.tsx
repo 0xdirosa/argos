@@ -176,7 +176,7 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
 
   if (hasEthereum === false) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-5">
+      <div className="glass-card rounded-xl p-5">
         <div className="flex flex-col items-center gap-3 py-6">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -191,7 +191,7 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
 
   if (!walletConnected) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-5">
+      <div className="glass-card rounded-xl p-5">
         <div className="flex flex-col items-center gap-4 py-6">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -211,7 +211,7 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
   }
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-5">
+    <div className="glass-card rounded-xl p-5">
       {walletAddr && (
         <div className="mb-4 flex items-center gap-2 px-3 py-2 bg-accent/5 border border-accent/20 rounded-lg">
           <span className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />

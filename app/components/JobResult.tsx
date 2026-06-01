@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { StatusBadge } from './AgentStats'
 import CopyButton from './CopyButton'
 import Skeleton from './Skeleton'
+import { showToast } from './Toast'
 
 type TraceStep = {
   step: number
@@ -58,7 +59,7 @@ export default function JobResult({
   useEffect(() => {
     if (isDemo) {
       fetch('/api/demo').then(r => r.ok ? r.json() : null).then(j => {
-        if (j) { setData(j); onDone?.() }
+        if (j) { setData(j); showToast('🚀 Demo loaded!'); onDone?.() }
       }).catch(() => setError('Demo data unavailable'))
       return
     }
@@ -78,6 +79,8 @@ export default function JobResult({
           setData(job)
 
           if (job.status === 'COMPLETED' || job.status === 'FAILED') {
+            if (job.status === 'COMPLETED') showToast('✅ Analysis completed!')
+            else if (job.status === 'FAILED') showToast('❌ Analysis failed')
             onDone?.()
             return
           }
@@ -94,7 +97,7 @@ export default function JobResult({
 
   if (error) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-5">
+      <div className="glass-card rounded-xl p-5">
         <p className="text-danger text-sm">{error}</p>
       </div>
     )
@@ -102,7 +105,7 @@ export default function JobResult({
 
   if (!data) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-5 space-y-3">
+      <div className="glass-card rounded-xl p-5 space-y-3">
         <div className="flex items-center gap-2">
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-4 w-16 rounded-full" />
@@ -118,7 +121,7 @@ export default function JobResult({
 
   return (
     <div
-      className={`bg-surface border border-border rounded-xl overflow-hidden animate-[fade-in_0.3s_ease-out]`}
+      className={`glass-card rounded-xl overflow-hidden animate-[fade-in_0.3s_ease-out]`}
     >
       <div className="px-5 py-4 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-3">

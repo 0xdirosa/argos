@@ -87,7 +87,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
         )}
       </div>
 
-      <div className="bg-surface border border-border rounded-xl p-4">
+      <div className="glass-card rounded-xl p-4">
         <h3 className="text-sm font-medium text-muted mb-3">Earnings vs Spending</h3>
         {stats ? (
           <div className="flex items-center gap-4 flex-wrap">
@@ -113,7 +113,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
         )}
       </div>
 
-      <div className="bg-surface border border-border rounded-xl overflow-hidden">
+      <div className="glass-card rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-border flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
             <h3 className="text-sm font-medium text-foreground">Recent Jobs</h3>
@@ -263,7 +263,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
 
 function StatCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="bg-surface border border-border rounded-xl p-4">
+    <div className="glass-card rounded-xl p-4">
       <p className="text-xs text-muted mb-1">{label}</p>
       <p className={`text-lg font-semibold font-mono ${color}`}>{value}</p>
     </div>
