@@ -19,7 +19,7 @@ type JobRow = {
   completed_at: string | null
 }
 
-export default function AgentStats() {
+export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string) => void }) {
   const [stats, setStats] = useState<Stats>({
     total_earned: 0, total_spent: 0, job_count: 0, arc_agent_id: null,
   })
@@ -51,54 +51,37 @@ export default function AgentStats() {
   }, [fetchData])
 
   const net = stats.total_earned - stats.total_spent
-  const maxVal = Math.max(stats.total_earned, stats.total_spent, 0.01)
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard
-          label="Total Earned"
-          value={`${stats.total_earned.toFixed(2)} USDC`}
-          color="text-success"
-        />
-        <StatCard
-          label="Total Spent"
-          value={`${stats.total_spent.toFixed(2)} USDC`}
-          color="text-warning"
-        />
-        <StatCard
-          label="Net Treasury"
-          value={`${net.toFixed(2)} USDC`}
-          color={net >= 0 ? 'text-success' : 'text-danger'}
-        />
-        <StatCard
-          label="Jobs Completed"
-          value={String(stats.job_count)}
-          color="text-info"
-        />
+        <StatCard label="Total Earned" value={`${stats.total_earned.toFixed(2)} USDC`} color="text-success" />
+        <StatCard label="Total Spent" value={`${stats.total_spent.toFixed(2)} USDC`} color="text-warning" />
+        <StatCard label="Net Treasury" value={`${net.toFixed(2)} USDC`} color={net >= 0 ? 'text-success' : 'text-danger'} />
+        <StatCard label="Jobs Completed" value={String(stats.job_count)} color="text-info" />
       </div>
 
       <div className="bg-surface border border-border rounded-xl p-4">
         <h3 className="text-sm font-medium text-muted mb-3">Earnings vs Spending</h3>
-        <div className="flex items-end gap-3 h-24">
-          <BarChart
-            label="Earned"
-            value={stats.total_earned}
-            max={maxVal}
-            color="bg-success"
-          />
-          <BarChart
-            label="Spent"
-            value={stats.total_spent}
-            max={maxVal}
-            color="bg-warning"
-          />
-          <BarChart
-            label="Net"
-            value={Math.max(net, 0)}
-            max={maxVal}
-            color={net >= 0 ? 'bg-accent' : 'bg-danger'}
-          />
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-success" />
+            <span className="text-xs text-muted">Earned</span>
+            <span className="text-sm font-mono font-semibold text-success">{stats.total_earned.toFixed(2)}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-warning" />
+            <span className="text-xs text-muted">Spent</span>
+            <span className="text-sm font-mono font-semibold text-warning">{stats.total_spent.toFixed(2)}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-accent" />
+            <span className="text-xs text-muted">Net</span>
+            <span className={`text-sm font-mono font-semibold ${net >= 0 ? 'text-success' : 'text-danger'}`}>
+              {net.toFixed(2)}
+            </span>
+          </div>
+          <span className="text-[10px] text-muted ml-auto">USDC</span>
         </div>
       </div>
 
@@ -115,23 +98,46 @@ export default function AgentStats() {
                 <th className="text-left px-4 py-2 font-medium">Target</th>
                 <th className="text-left px-4 py-2 font-medium">Status</th>
                 <th className="text-left px-4 py-2 font-medium hidden sm:table-cell">Created</th>
+                <th className="text-right px-4 py-2 font-medium w-10">Arc</th>
               </tr>
             </thead>
             <tbody>
               {jobs.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-muted text-sm">
+                  <td colSpan={5} className="px-4 py-8 text-center text-muted text-sm">
                     No jobs yet. Submit your first analysis above.
                   </td>
                 </tr>
               ) : (
                 jobs.map((job) => (
-                  <tr key={job.id} className="border-b border-border/50 hover:bg-surface-2 transition-colors">
+                  <tr
+                    key={job.id}
+                    onClick={() => onJobSelect?.(job.id)}
+                    className="border-b border-border/50 hover:bg-surface-2 transition-colors cursor-pointer"
+                  >
                     <td className="px-4 py-2.5 font-mono text-xs uppercase text-muted">{job.query_type}</td>
                     <td className="px-4 py-2.5 font-mono text-xs">{shortenAddress(job.target)}</td>
                     <td className="px-4 py-2.5"><StatusBadge status={job.status} /></td>
                     <td className="px-4 py-2.5 text-muted text-xs hidden sm:table-cell">
                       {new Date(job.created_at).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-2.5 text-right">
+                      {job.arc_tx_hash && (
+                        <a
+                          href={`https://testnet.arcscan.com/tx/${job.arc_tx_hash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-surface text-muted hover:text-foreground transition-colors"
+                          title="View on Arc Explorer"
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                            <polyline points="15 3 21 3 21 9" />
+                            <line x1="10" y1="14" x2="21" y2="3" />
+                          </svg>
+                        </a>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -149,22 +155,6 @@ function StatCard({ label, value, color }: { label: string; value: string; color
     <div className="bg-surface border border-border rounded-xl p-4">
       <p className="text-xs text-muted mb-1">{label}</p>
       <p className={`text-lg font-semibold font-mono ${color}`}>{value}</p>
-    </div>
-  )
-}
-
-function BarChart({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
-  const pct = max > 0 ? (value / max) * 100 : 0
-  return (
-    <div className="flex-1 flex flex-col items-center gap-1">
-      <div className="w-full bg-surface-2 rounded-full overflow-hidden" style={{ height: 80 }}>
-        <div
-          className={`${color} rounded-full transition-all duration-500 w-full`}
-          style={{ height: `${Math.max(pct, 0)}%`, marginTop: `${100 - Math.max(pct, 0)}%` }}
-        />
-      </div>
-      <span className="text-[10px] text-muted font-mono">{value.toFixed(1)}</span>
-      <span className="text-[10px] text-muted">{label}</span>
     </div>
   )
 }

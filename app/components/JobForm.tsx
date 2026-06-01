@@ -1,17 +1,63 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, useEffect, useRef } from 'react'
 
 type QueryType = 'wallet' | 'token' | 'contract'
 
-type Step = 'idle' | 'initiating' | 'awaiting-auth' | 'verifying' | 'queued' | 'error'
+type FlowStep = 'idle' | 'initiating' | 'awaiting-auth' | 'verifying' | 'queued' | 'processing' | 'settling' | 'complete' | 'error'
+
+const FLOW_LABELS: Record<FlowStep, string> = {
+  idle: '',
+  initiating: 'Initiating x402 payment...',
+  'awaiting-auth': 'Waiting for authorization...',
+  verifying: 'Verifying payment...',
+  queued: 'Agent queued',
+  processing: 'Agent processing...',
+  settling: 'Settling on-chain...',
+  complete: 'Complete',
+  error: '',
+}
+
+const FLOW_ORDER: FlowStep[] = ['initiating', 'awaiting-auth', 'verifying', 'queued', 'processing', 'settling', 'complete']
 
 export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) => void }) {
   const [target, setTarget] = useState('')
   const [queryType, setQueryType] = useState<QueryType>('wallet')
-  const [step, setStep] = useState<Step>('idle')
+  const [step, setStep] = useState<FlowStep>('idle')
   const [jobId, setJobId] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current)
+    }
+  }, [])
+
+  function startPolling(id: string) {
+    const flowMap: Record<string, FlowStep> = {
+      QUEUED: 'queued',
+      PROCESSING: 'processing',
+      VALIDATING: 'processing',
+      COMPLETED: 'complete',
+      FAILED: 'complete',
+    }
+
+    pollRef.current = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/jobs/${id}`)
+        if (!res.ok) return
+        const job = await res.json()
+        const nextStep = flowMap[job.status] ?? step
+        setStep(nextStep)
+        if (job.status === 'COMPLETED' || job.status === 'FAILED') {
+          if (pollRef.current) clearInterval(pollRef.current)
+        }
+      } catch {
+        // retry
+      }
+    }, 2000)
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -74,6 +120,7 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
         setJobId(retryData.jobId)
         setStep('queued')
         onJobCreated?.(retryData.jobId)
+        startPolling(retryData.jobId)
         return
       }
 
@@ -88,17 +135,14 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
       setJobId(data.jobId)
       setStep('queued')
       onJobCreated?.(data.jobId)
+      startPolling(data.jobId)
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Network error')
       setStep('error')
     }
   }
 
-  const stepIndex: Record<Step, number> = {
-    idle: -1, initiating: 0, 'awaiting-auth': 1, verifying: 2, queued: 3, error: -1,
-  }
-  const labels = ['Initiating payment...', 'Waiting for authorization...', 'Verifying payment...', 'Job queued!']
-  const current = stepIndex[step]
+  const currentIdx = FLOW_ORDER.indexOf(step)
 
   return (
     <div className="bg-surface border border-border rounded-xl p-5">
@@ -137,31 +181,34 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
 
         <button
           type="submit"
-          disabled={current >= 0 && current < 3}
+          disabled={currentIdx >= 0}
           className="w-full bg-accent hover:bg-accent-hover disabled:bg-accent/40 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition-colors disabled:cursor-not-allowed"
         >
-          {current >= 0 && current < 3 ? 'Processing...' : 'Analyze — 0.50 USDC'}
+          {currentIdx >= 0 ? 'Processing...' : 'Analyze — 0.50 USDC'}
         </button>
       </form>
 
-      {current >= 0 && (
+      {currentIdx >= 0 && (
         <div className="mt-5 space-y-2">
-          {labels.map((label, i) => (
+          {FLOW_ORDER.map((label, i) => (
             <div key={i} className={`flex items-center gap-2.5 text-sm ${
-              i === current ? 'text-foreground' : i < current ? 'text-success' : 'text-muted'
+              i === currentIdx ? 'text-foreground' : i < currentIdx ? 'text-success' : 'text-muted'
             }`}>
               <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                i < current ? 'bg-success/20 text-success' : i === current ? 'bg-accent/20 text-accent' : 'bg-surface-2 text-muted'
+                i < currentIdx ? 'bg-success/20 text-success' : i === currentIdx ? 'bg-accent/20 text-accent' : 'bg-surface-2 text-muted'
               }`}>
-                {i < current ? '✓' : i === current ? '●' : '○'}
+                {i < currentIdx ? '✓' : i === currentIdx ? '●' : '○'}
               </div>
-              <span className={i === current ? 'font-medium' : ''}>{label}</span>
+              <span className={i === currentIdx ? 'font-medium' : ''}>{FLOW_LABELS[label]}</span>
+              {i === currentIdx && label === 'processing' && (
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-[pulse-dot_1.5s_ease-in-out_infinite]" />
+              )}
             </div>
           ))}
         </div>
       )}
 
-      {jobId && (
+      {jobId && !['queued', 'processing', 'settling', 'complete'].includes(step) && (
         <div className="mt-4 bg-accent/10 border border-accent/20 rounded-lg px-3 py-2.5">
           <p className="text-xs text-muted mb-0.5">Job ID</p>
           <p className="text-sm font-mono text-accent break-all">{jobId}</p>

@@ -46,7 +46,7 @@ export default function Home() {
         </section>
 
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
-          <AgentStats />
+          <AgentStats onJobSelect={setActiveJobId} />
         </section>
 
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
