@@ -135,3 +135,8 @@
 [c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] STEP 4/4 — Storing result hash on-chain...
 [c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] ✅ Complete — txHash: 0xdb755161033f4c6794d05221ec1cf0125ad0554359a7d3908eb0e3ec3f975801
 [worker] ✅ Job c57f8e92-27ba-44a2-ac8c-031fbf0cceaf completed
+◇ injected env (0) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+[worker] Starting poll loop at 2026-06-01T14:25:00.079Z
+[worker] Processing job c8a3b74e-9ab6-4ab7-8888-16004895045c...
+[c8a3b74e-9ab6-4ab7-8888-16004895045c] ❌ Pipeline failed: Job c8a3b74e-9ab6-4ab7-8888-16004895045c is PROCESSING, not QUEUED
+[worker] ✅ Job c8a3b74e-9ab6-4ab7-8888-16004895045c completed

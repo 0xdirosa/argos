@@ -43,7 +43,9 @@ export async function runAnalysis(jobId: string): Promise<void> {
       return
     }
     job = data as JobRow
-    if (job.status !== 'QUEUED') throw new Error(`Job ${jobId} is ${job.status}, not QUEUED`)
+    if (job.status !== 'QUEUED' && job.status !== 'PROCESSING') {
+      throw new Error(`Job ${jobId} is ${job.status}, expected QUEUED or PROCESSING`)
+    }
 
     // ── STEP 1: Collect ──
     await supabase.from('jobs').update({ status: 'PROCESSING' }).eq('id', jobId)
