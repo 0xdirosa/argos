@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { StatusBadge } from './AgentStats'
 import CopyButton from './CopyButton'
+import Skeleton from './Skeleton'
 
 type TraceStep = {
   step: number
@@ -50,6 +51,7 @@ export default function JobResult({
 }) {
   const [data, setData] = useState<JobResultData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const prevStatus = useRef<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -63,6 +65,7 @@ export default function JobResult({
             return
           }
           const job: JobResultData = await res.json()
+          prevStatus.current = data?.status ?? null
           setData(job)
 
           if (job.status === 'COMPLETED' || job.status === 'FAILED') {
@@ -78,7 +81,7 @@ export default function JobResult({
 
     poll()
     return () => { cancelled = true }
-  }, [jobId, onDone])
+  }, [jobId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (error) {
     return (
@@ -90,17 +93,24 @@ export default function JobResult({
 
   if (!data) {
     return (
-      <div className="bg-surface border border-border rounded-xl p-5">
-        <div className="flex items-center gap-2 text-muted text-sm">
-          <span className="w-2 h-2 rounded-full bg-accent animate-[pulse-dot_1.5s_ease-in-out_infinite]" />
-          Loading result...
+      <div className="bg-surface border border-border rounded-xl p-5 space-y-3">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-4 w-28" />
+          <Skeleton className="h-4 w-16 rounded-full" />
         </div>
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-12 w-full" />
       </div>
     )
   }
 
+  const justCompleted = prevStatus.current && prevStatus.current !== 'COMPLETED' && data.status === 'COMPLETED'
+
   return (
-    <div className="bg-surface border border-border rounded-xl overflow-hidden">
+    <div
+      className={`bg-surface border border-border rounded-xl overflow-hidden animate-[fade-in_0.3s_ease-out]`}
+    >
       <div className="px-5 py-4 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h3 className="text-sm font-medium text-foreground">Analysis Result</h3>
@@ -117,7 +127,7 @@ export default function JobResult({
             <p className="text-sm text-danger">{data.error_msg ?? 'Analysis failed'}</p>
           </div>
         ) : data.result ? (
-          <>
+          <div className={`space-y-5 ${justCompleted ? 'animate-[fade-in_0.4s_ease-out]' : ''}`}>
             <div>
               <p className="text-sm text-foreground leading-relaxed">{data.result.summary}</p>
               <p className="text-xs text-muted mt-1.5">
@@ -175,7 +185,7 @@ export default function JobResult({
                 New Analysis
               </button>
             )}
-          </>
+          </div>
         ) : data.status === 'QUEUED' || data.status === 'PROCESSING' || data.status === 'VALIDATING' ? (
           <div className="flex items-center gap-2 text-muted text-sm py-4">
             <span className="w-2 h-2 rounded-full bg-accent animate-[pulse-dot_1.5s_ease-in-out_infinite]" />
@@ -204,6 +214,12 @@ function RiskBadge({ score }: { score: string }) {
 }
 
 function FindingCard({ finding }: { finding: NonNullable<JobResultData['result']>['findings'][number] }) {
+  const borderColors: Record<string, string> = {
+    LOW: 'border-l-green-500',
+    MEDIUM: 'border-l-yellow-500',
+    HIGH: 'border-l-orange-500',
+    CRITICAL: 'border-l-red-500',
+  }
   const severityColors: Record<string, string> = {
     LOW: 'bg-green-500',
     MEDIUM: 'bg-yellow-500',
@@ -212,7 +228,7 @@ function FindingCard({ finding }: { finding: NonNullable<JobResultData['result']
   }
 
   return (
-    <div className="bg-surface-2 border border-border rounded-lg p-4">
+    <div className={`bg-surface-2 border border-border border-l-4 ${borderColors[finding.severity] ?? 'border-l-zinc-500'} rounded-lg p-4`}>
       <div className="flex items-start justify-between mb-2">
         <h5 className="text-sm font-medium text-foreground">{finding.title}</h5>
         <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${severityColors[finding.severity] ?? 'bg-zinc-500'} text-white`}>
