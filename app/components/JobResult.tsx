@@ -174,7 +174,7 @@ export default function JobResult({
               {data.arc_tx_hash && (
                 <DetailRow label="Arc Tx" copyText={data.arc_tx_hash}>
                   <a
-                    href={`https://explorer.arc-testnet.usdc.com/tx/${data.arc_tx_hash}`}
+                    href={`https://testnet.arcscan.app/tx/${data.arc_tx_hash}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-accent hover:text-accent-hover font-mono text-xs underline underline-offset-2"

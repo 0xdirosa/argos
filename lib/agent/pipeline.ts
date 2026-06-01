@@ -69,7 +69,7 @@ export async function runAnalysis(jobId: string): Promise<void> {
       if ('holders' in rawData) collectDetails.holders = rawData.holders
       if ('error' in rawData) collectDetails.error = rawData.error
     }
-    collectDetails.arcExplorer = `https://explorer.arc-testnet.usdc.com/address/${job.target}`
+    collectDetails.arcExplorer = `https://testnet.arcscan.app/address/${job.target}`
 
     traceSteps.push({
       step: 1,
@@ -160,7 +160,7 @@ export async function runAnalysis(jobId: string): Promise<void> {
       details: {
         contractAddress: process.env.ARGOS_CONTRACT_ADDRESS ?? '',
         txHash,
-        arcExplorer: txHash ? `https://explorer.arc-testnet.usdc.com/tx/${txHash}` : '',
+        arcExplorer: txHash ? `https://testnet.arcscan.app/tx/${txHash}` : '',
         paymentIn: job.payment_in ?? 0,
       },
     })

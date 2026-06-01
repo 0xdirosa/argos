@@ -94,7 +94,7 @@ export default function ProofPage() {
                     <td className="px-4 py-3">
                       {job.arc_tx_hash ? (
                         <a
-                          href={`https://explorer.arc-testnet.usdc.com/tx/${job.arc_tx_hash}`}
+                          href={`https://testnet.arcscan.app/tx/${job.arc_tx_hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent hover:text-accent-hover font-mono text-xs underline underline-offset-2"
@@ -117,7 +117,7 @@ export default function ProofPage() {
           <p className="text-muted mb-1">
             ArgosJobManager deployed at{' '}
             <a
-              href="https://explorer.arc-testnet.usdc.com/address/0xe19b55f5f8da0af5ecdbf351ba3e672698242bac"
+              href="https://testnet.arcscan.app/address/0xe19b55f5f8da0af5ecdbf351ba3e672698242bac"
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent hover:text-accent-hover underline underline-offset-2 font-mono"
