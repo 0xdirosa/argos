@@ -94,7 +94,7 @@ export default function ProofPage() {
                     <td className="px-4 py-3">
                       {job.arc_tx_hash ? (
                         <a
-                          href={`https://testnet.arcscan.app/tx/${job.arc_tx_hash}`}
+                          href={`https://explorer.arc-testnet.usdc.com/tx/${job.arc_tx_hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-accent hover:text-accent-hover font-mono text-xs underline underline-offset-2"

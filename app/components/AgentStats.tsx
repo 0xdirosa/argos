@@ -195,7 +195,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
                         <td className="px-4 py-2.5 text-right">
                           {job.arc_tx_hash && (
                             <a
-                              href={`https://testnet.arcscan.app/tx/${job.arc_tx_hash}`}
+                              href={`https://explorer.arc-testnet.usdc.com/tx/${job.arc_tx_hash}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => e.stopPropagation()}
@@ -240,7 +240,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
                       <span>{relativeTime(job.created_at)}</span>
                       {job.arc_tx_hash && (
                         <a
-                          href={`https://testnet.arcscan.app/tx/${job.arc_tx_hash}`}
+                          href={`https://explorer.arc-testnet.usdc.com/tx/${job.arc_tx_hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
