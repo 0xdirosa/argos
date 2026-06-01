@@ -137,7 +137,7 @@ export default function JobResult({ jobId, onDone }: { jobId: string; onDone?: (
               {data.arc_tx_hash && (
                 <DetailRow label="Arc Tx">
                   <a
-                    href={`https://testnet.arcscan.com/tx/${data.arc_tx_hash}`}
+                    href={`https://testnet.arcscan.app/tx/${data.arc_tx_hash}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-accent hover:text-accent-hover font-mono text-xs underline underline-offset-2"

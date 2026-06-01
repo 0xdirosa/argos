@@ -124,7 +124,7 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
                     <td className="px-4 py-2.5 text-right">
                       {job.arc_tx_hash && (
                         <a
-                          href={`https://testnet.arcscan.com/tx/${job.arc_tx_hash}`}
+                          href={`https://testnet.arcscan.app/tx/${job.arc_tx_hash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
