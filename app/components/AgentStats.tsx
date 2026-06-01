@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import CopyButton from './CopyButton'
 
 type Stats = {
   total_earned: number
@@ -116,10 +117,15 @@ export default function AgentStats({ onJobSelect }: { onJobSelect?: (id: string)
                     className="border-b border-border/50 hover:bg-surface-2 transition-colors cursor-pointer"
                   >
                     <td className="px-4 py-2.5 font-mono text-xs uppercase text-muted">{job.query_type}</td>
-                    <td className="px-4 py-2.5 font-mono text-xs">{shortenAddress(job.target)}</td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex items-center gap-1 font-mono text-xs">
+                        <span className="truncate">{shortenAddress(job.target)}</span>
+                        <CopyButton text={job.target} />
+                      </div>
+                    </td>
                     <td className="px-4 py-2.5"><StatusBadge status={job.status} /></td>
                     <td className="px-4 py-2.5 text-muted text-xs hidden sm:table-cell">
-                      {new Date(job.created_at).toLocaleString()}
+                      {relativeTime(job.created_at)}
                     </td>
                     <td className="px-4 py-2.5 text-right">
                       {job.arc_tx_hash && (
@@ -179,4 +185,15 @@ export function StatusBadge({ status }: { status: string }) {
 
 function shortenAddress(addr: string): string {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+}
+
+function relativeTime(dateStr: string): string {
+  const now = Date.now()
+  const then = new Date(dateStr).getTime()
+  const diffSec = Math.floor((now - then) / 1000)
+  if (diffSec < 60) return 'just now'
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`
+  if (diffSec < 2592000) return `${Math.floor(diffSec / 86400)}d ago`
+  return new Date(dateStr).toLocaleDateString()
 }

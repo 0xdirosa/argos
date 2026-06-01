@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { StatusBadge } from './AgentStats'
+import CopyButton from './CopyButton'
 
 type TraceStep = {
   step: number
@@ -38,7 +39,15 @@ type JobResultData = {
   completed_at: string | null
 }
 
-export default function JobResult({ jobId, onDone }: { jobId: string; onDone?: () => void }) {
+export default function JobResult({
+  jobId,
+  onDone,
+  onNewAnalysis,
+}: {
+  jobId: string
+  onDone?: () => void
+  onNewAnalysis?: () => void
+}) {
   const [data, setData] = useState<JobResultData | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -132,10 +141,16 @@ export default function JobResult({ jobId, onDone }: { jobId: string; onDone?: (
             )}
 
             <div className="bg-surface-2 border border-border rounded-lg divide-y divide-border">
-              <DetailRow label="Job ID" value={data.id} mono />
-              {data.result_hash && <DetailRow label="Result Hash" value={data.result_hash} mono />}
+              <DetailRow label="Job ID" mono copyText={data.id}>
+                <span className="font-mono text-xs text-foreground">{shortenId(data.id)}</span>
+              </DetailRow>
+              {data.result_hash && (
+                <DetailRow label="Result Hash" mono copyText={data.result_hash}>
+                  <span className="font-mono text-xs text-foreground">{shortenHash(data.result_hash)}</span>
+                </DetailRow>
+              )}
               {data.arc_tx_hash && (
-                <DetailRow label="Arc Tx">
+                <DetailRow label="Arc Tx" copyText={data.arc_tx_hash}>
                   <a
                     href={`https://testnet.arcscan.app/tx/${data.arc_tx_hash}`}
                     target="_blank"
@@ -150,6 +165,16 @@ export default function JobResult({ jobId, onDone }: { jobId: string; onDone?: (
                 <DetailRow label="Paid" value={`${data.payment_in.toFixed(2)} USDC`} />
               )}
             </div>
+
+            {onNewAnalysis && (
+              <button
+                type="button"
+                onClick={onNewAnalysis}
+                className="w-full bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-4 py-2.5 text-sm transition-colors"
+              >
+                New Analysis
+              </button>
+            )}
           </>
         ) : data.status === 'QUEUED' || data.status === 'PROCESSING' || data.status === 'VALIDATING' ? (
           <div className="flex items-center gap-2 text-muted text-sm py-4">
@@ -301,20 +326,28 @@ function ReasoningTrace({
   )
 }
 
-function DetailRow({ label, value, mono, children }: {
+function DetailRow({ label, value, mono, children, copyText }: {
   label: string
   value?: string
   mono?: boolean
   children?: React.ReactNode
+  copyText?: string
 }) {
   return (
     <div className="flex items-center justify-between px-4 py-2.5">
       <span className="text-xs text-muted">{label}</span>
-      {children ?? (
-        <span className={`text-xs ${mono ? 'font-mono' : ''} text-foreground`}>{value}</span>
-      )}
+      <div className="flex items-center gap-1.5 max-w-[60%]">
+        {children ?? (
+          <span className={`text-xs truncate ${mono ? 'font-mono' : ''} text-foreground`}>{value}</span>
+        )}
+        {copyText && <CopyButton text={copyText} />}
+      </div>
     </div>
   )
+}
+
+function shortenId(id: string): string {
+  return `${id.slice(0, 8)}...${id.slice(-4)}`
 }
 
 function shortenHash(hash: string): string {

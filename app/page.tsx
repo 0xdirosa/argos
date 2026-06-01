@@ -58,7 +58,7 @@ export default function Home() {
             <div className="lg:col-span-3">
               <h2 className="text-sm font-medium text-foreground mb-3">Result</h2>
               {activeJobId ? (
-                <JobResult key={activeJobId} jobId={activeJobId} onDone={() => {}} />
+                <JobResult key={activeJobId} jobId={activeJobId} onDone={() => {}} onNewAnalysis={() => setActiveJobId(null)} />
               ) : (
                 <div className="bg-surface border border-border rounded-xl p-8 flex items-center justify-center">
                   <p className="text-sm text-muted">Submit an analysis to see results here.</p>

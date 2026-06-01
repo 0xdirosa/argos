@@ -26,7 +26,37 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
   const [step, setStep] = useState<FlowStep>('idle')
   const [jobId, setJobId] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [walletConnected, setWalletConnected] = useState(false)
+  const [walletAddr, setWalletAddr] = useState<string | null>(null)
+  const [hasEthereum, setHasEthereum] = useState<boolean | null>(null)
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    const eth = typeof window !== 'undefined' && (window as unknown as Record<string, unknown>)['ethereum'] as { request: (args: Record<string, unknown>) => Promise<unknown> } | undefined
+    setHasEthereum(!!eth)
+    if (eth) {
+      eth.request({ method: 'eth_accounts' }).then((accounts) => {
+        if (Array.isArray(accounts) && accounts.length > 0) {
+          setWalletConnected(true)
+          setWalletAddr(accounts[0] as string)
+        }
+      }).catch(() => {})
+    }
+  }, [])
+
+  async function connectWallet() {
+    try {
+      const eth = (window as unknown as Record<string, { request: (args: Record<string, unknown>) => Promise<unknown> }>).ethereum
+      if (!eth) return
+      const accounts = await eth.request({ method: 'eth_requestAccounts' }) as string[]
+      if (accounts?.length > 0) {
+        setWalletConnected(true)
+        setWalletAddr(accounts[0])
+      }
+    } catch {
+      setErrorMsg('Wallet connection rejected')
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -144,8 +174,50 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
 
   const currentIdx = FLOW_ORDER.indexOf(step)
 
+  if (hasEthereum === false) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-5">
+        <div className="flex flex-col items-center gap-3 py-6">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <p className="text-sm text-muted text-center">No wallet detected.</p>
+          <p className="text-xs text-muted text-center">Install MetaMask or another wallet to use x402 payments.</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!walletConnected) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-5">
+        <div className="flex flex-col items-center gap-4 py-6">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <p className="text-sm text-muted text-center">Connect your wallet to pay via x402.</p>
+          <button
+            type="button"
+            onClick={connectWallet}
+            className="bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-5 py-2.5 text-sm transition-colors"
+          >
+            Connect Wallet
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-surface border border-border rounded-xl p-5">
+      {walletAddr && (
+        <div className="mb-4 flex items-center gap-2 px-3 py-2 bg-accent/5 border border-accent/20 rounded-lg">
+          <span className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />
+          <span className="text-[11px] text-muted font-mono truncate">{shortenAddress(walletAddr)}</span>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="target" className="block text-sm font-medium text-foreground mb-1.5">
@@ -295,4 +367,8 @@ async function createX402Payment(paymentRequiredB64: string): Promise<unknown | 
     console.error('[x402] Payment creation failed:', err)
     return null
   }
+}
+
+function shortenAddress(addr: string): string {
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`
 }
