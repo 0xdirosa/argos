@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requireX402Payment, create402Response, addPaymentResponseHeader } from '@/lib/circle/seller'
 import { createJobOnChain } from '@/lib/arc/contract'
-import { runAnalysis } from '@/lib/agent/pipeline'
 import crypto from 'crypto'
 
 const PRICE = parseFloat(process.env.PRICE_PER_ANALYSIS ?? '0.50')
@@ -72,10 +71,6 @@ export async function POST(request: NextRequest) {
     } catch (chainErr) {
       console.error(`[POST /api/analyze] createJobOnChain failed for ${jobId}:`, chainErr)
     }
-
-    runAnalysis(jobId).catch((err) =>
-      console.error(`[background] runAnalysis(${jobId}) failed:`, err),
-    )
 
     const response = NextResponse.json(
       { jobId, status: 'QUEUED', message: 'Analysis queued' },

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 const ARC_TESTNET_NETWORK = 'eip155:5042002'
 const ARC_TESTNET_USDC = '0x3600000000000000000000000000000000000000'
@@ -92,19 +91,6 @@ export async function requireX402Payment(
 
     const amountPaid = priceUsdc
     const payer = settleResult.payer ?? verifyResult.payer ?? 'unknown'
-
-    try {
-      const supabase = createAdminClient()
-      await supabase.from('jobs').insert({
-        payment_in: amountPaid,
-        status: 'QUEUED',
-        query: '',
-        query_type: 'wallet',
-        target: payer,
-      })
-    } catch {
-      // non-critical
-    }
 
     return { paid: true, amountPaid, payer }
   } catch (err) {
