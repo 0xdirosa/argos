@@ -1,6 +1,10 @@
 import Groq from 'groq-sdk'
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
+let _groq: Groq | null = null
+function getGroq() {
+  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
+  return _groq
+}
 
 export type Finding = {
   title: string
@@ -68,7 +72,7 @@ Follow the chain-of-thought process: INSPECT → CORRELATE → EVIDENCE → SCOR
 Return only valid JSON.`
 
   try {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       model: 'llama-3.1-8b-instant',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
