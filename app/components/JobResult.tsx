@@ -3,6 +3,14 @@
 import { useEffect, useState } from 'react'
 import { StatusBadge } from './AgentStats'
 
+type TraceStep = {
+  step: number
+  name: string
+  description: string
+  durationMs: number
+  details: Record<string, unknown>
+}
+
 type JobResultData = {
   id: string
   status: string
@@ -18,6 +26,10 @@ type JobResultData = {
     }>
     riskScore: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
     confidence: number
+    reasoning_trace?: {
+      steps: TraceStep[]
+      totalDurationMs: number
+    }
   } | null
   result_hash: string | null
   arc_tx_hash: string | null
@@ -111,6 +123,14 @@ export default function JobResult({ jobId, onDone }: { jobId: string; onDone?: (
               ))}
             </div>
 
+            {data.result.reasoning_trace && (
+              <ReasoningTrace
+                steps={data.result.reasoning_trace.steps}
+                totalMs={data.result.reasoning_trace.totalDurationMs}
+                paymentIn={data.payment_in}
+              />
+            )}
+
             <div className="bg-surface-2 border border-border rounded-lg divide-y divide-border">
               <DetailRow label="Job ID" value={data.id} mono />
               {data.result_hash && <DetailRow label="Result Hash" value={data.result_hash} mono />}
@@ -185,6 +205,98 @@ function FindingCard({ finding }: { finding: NonNullable<JobResultData['result']
         </div>
         <span className="text-[10px] font-mono text-muted">{finding.confidence}%</span>
       </div>
+    </div>
+  )
+}
+
+function ReasoningTrace({
+  steps,
+  totalMs,
+  paymentIn,
+}: {
+  steps: TraceStep[]
+  totalMs: number
+  paymentIn: number | null
+}) {
+  const [expanded, setExpanded] = useState(false)
+
+  const icons: Record<number, string> = {
+    1: '🔍',
+    2: '🧠',
+    3: '✓',
+    4: '⛓️',
+  }
+
+  return (
+    <div className="bg-surface-2 border border-border rounded-lg overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <h4 className="text-xs font-medium text-muted uppercase tracking-wider">Reasoning Trace</h4>
+          <span className="text-[10px] text-muted font-mono">
+            {steps.length} steps · {(totalMs / 1000).toFixed(1)}s
+          </span>
+        </div>
+        <span className={`text-xs text-muted transition-transform ${expanded ? 'rotate-180' : ''}`}>
+          ▼
+        </span>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-border divide-y divide-border">
+          {steps.map((s) => (
+            <div key={s.step} className="px-4 py-3">
+              <div className="flex items-start gap-3">
+                <span className="text-sm mt-0.5">{icons[s.step] ?? '•'}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <span className="text-xs font-medium text-foreground">{s.name}</span>
+                    <span className="text-[10px] text-muted font-mono">
+                      {(s.durationMs / 1000).toFixed(1)}s
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted mb-1.5">{s.description}</p>
+                  <div className="bg-surface rounded-md px-2.5 py-1.5 space-y-0.5">
+                    {Object.entries(s.details).map(([key, val]) => {
+                      const displayVal = typeof val === 'object' ? JSON.stringify(val) : String(val)
+                      const isExplorer = key === 'arcExplorer' && typeof val === 'string' && val.startsWith('http')
+                      return (
+                        <div key={key} className="flex items-center gap-2 text-[10px]">
+                          <span className="text-muted whitespace-nowrap">{key}:</span>
+                          {isExplorer ? (
+                            <a
+                              href={val as string}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-accent hover:text-accent-hover underline underline-offset-2 truncate"
+                            >
+                              {val as string}
+                            </a>
+                          ) : (
+                            <span className="text-foreground font-mono truncate">{displayVal}</span>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {paymentIn != null && (
+            <div className="px-4 py-2.5 bg-accent/5 border-t border-border">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-muted">Total spent</span>
+                <span className="text-foreground font-mono font-medium">{paymentIn.toFixed(2)} USDC</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

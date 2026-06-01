@@ -10,3 +10,128 @@
 [43ca5a19-485b-4a57-abbc-9c1c147852a3] STEP 4/4 — Storing result hash on-chain...
 [43ca5a19-485b-4a57-abbc-9c1c147852a3] ✅ Complete — txHash: 0xb5b7ff4a9f09b059b72b2db747a8570ef03890b816e14f0078de25beb8d45dd3
 [worker] ✅ Job 43ca5a19-485b-4a57-abbc-9c1c147852a3 completed
+[worker] Found 1 queued job(s)
+[worker] Processing job d8dad83a-d024-4a04-a92c-0e27fceabced...
+[d8dad83a-d024-4a04-a92c-0e27fceabced] STEP 1/4 — Collecting data for 0x6fa0422642cb8eef40487234950b0d6a98d069e3 (wallet)
+[d8dad83a-d024-4a04-a92c-0e27fceabced] Collected: {"target":"0x6fa0422642cb8eef40487234950b0d6a98d069e3","queryType":"wallet","balance":"19980076075567.23","txCount":1,"isContract":false}
+[d8dad83a-d024-4a04-a92c-0e27fceabced] STEP 2/4 — Reasoning via Groq AI...
+[d8dad83a-d024-4a04-a92c-0e27fceabced] Analysis: 2 findings, confidence 85
+[d8dad83a-d024-4a04-a92c-0e27fceabced] STEP 3/4 — Validating result...
+[d8dad83a-d024-4a04-a92c-0e27fceabced] Validation passed
+[d8dad83a-d024-4a04-a92c-0e27fceabced] STEP 4/4 — Storing result hash on-chain...
+[d8dad83a-d024-4a04-a92c-0e27fceabced] ✅ Complete — txHash: 0xd99e9dd2fa1db573941199bf6f89f380d2789d09fc79d3590a68dc62616f4b98
+[worker] ✅ Job d8dad83a-d024-4a04-a92c-0e27fceabced completed
+[worker] Starting poll loop at 2026-06-01T11:00:43.449Z
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+    at <anonymous> (/home/ubuntu/projects/argos/agent/worker.ts:42:1)
+    at Object.<anonymous> (/home/ubuntu/projects/argos/agent/worker.ts:45:2)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object.transformer (/home/ubuntu/projects/argos/node_modules/tsx/dist/register-BOkp8V6j.cjs:9:3176)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Poll cycle error: Error: supabaseUrl is required.
+    at validateSupabaseUrl (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/lib/helpers.ts:111:11)
+    at new SupabaseClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/SupabaseClient.ts:314:21)
+    at createClient (/home/ubuntu/projects/argos/node_modules/@supabase/supabase-js/src/index.ts:65:10)
+    at createAdminClient (/home/ubuntu/projects/argos/lib/supabase/admin.ts:4:10)
+    at poll (/home/ubuntu/projects/argos/agent/worker.ts:10:24)
+[worker] Starting poll loop at 2026-06-01T11:02:21.657Z
+[worker] Found 1 queued job(s)
+[worker] Processing job c57f8e92-27ba-44a2-ac8c-031fbf0cceaf...
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] STEP 1/4 — Collecting data for 0x6fa0422642cb8eef40487234950b0d6a98d069e3 (wallet)
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] Collected: {"target":"0x6fa0422642cb8eef40487234950b0d6a98d069e3","queryType":"wallet","balance":"19980076075567.23","txCount":1,"isContract":false}
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] STEP 2/4 — Reasoning via Groq AI...
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] Analysis: 2 findings, confidence 92
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] STEP 3/4 — Validating result...
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] Validation passed
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] STEP 4/4 — Storing result hash on-chain...
+[c57f8e92-27ba-44a2-ac8c-031fbf0cceaf] ✅ Complete — txHash: 0xdb755161033f4c6794d05221ec1cf0125ad0554359a7d3908eb0e3ec3f975801
+[worker] ✅ Job c57f8e92-27ba-44a2-ac8c-031fbf0cceaf completed
