@@ -20,7 +20,7 @@ const FLOW_LABELS: Record<FlowStep, string> = {
 
 const FLOW_ORDER: FlowStep[] = ['initiating', 'awaiting-auth', 'verifying', 'queued', 'processing', 'settling', 'complete']
 
-export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) => void }) {
+export default function JobForm({ onJobCreated, onDemo }: { onJobCreated?: (id: string) => void; onDemo?: () => void }) {
   const [target, setTarget] = useState('')
   const [queryType, setQueryType] = useState<QueryType>('wallet')
   const [step, setStep] = useState<FlowStep>('idle')
@@ -173,95 +173,134 @@ export default function JobForm({ onJobCreated }: { onJobCreated?: (id: string) 
   }
 
   const currentIdx = FLOW_ORDER.indexOf(step)
-
-  if (hasEthereum === false) {
-    return (
-      <div className="glass-card rounded-xl p-5">
-        <div className="flex flex-col items-center gap-3 py-6">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          <p className="text-sm text-muted text-center">No wallet detected.</p>
-          <p className="text-xs text-muted text-center">Install MetaMask or another wallet to use x402 payments.</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!walletConnected) {
-    return (
-      <div className="glass-card rounded-xl p-5">
-        <div className="flex flex-col items-center gap-4 py-6">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          <p className="text-sm text-muted text-center">Connect your wallet to pay via x402.</p>
-          <button
-            type="button"
-            onClick={connectWallet}
-            className="bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-5 py-2.5 text-sm transition-colors"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      </div>
-    )
-  }
+  const inProgress = currentIdx >= 0
 
   return (
     <div className="glass-card rounded-xl p-5">
-      {walletAddr && (
-        <div className="mb-4 flex items-center gap-2 px-3 py-2 bg-accent/5 border border-accent/20 rounded-lg">
-          <span className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />
-          <span className="text-[11px] text-muted font-mono truncate">{shortenAddress(walletAddr)}</span>
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="target" className="block text-sm font-medium text-foreground mb-1.5">
-            Target Address
-          </label>
-          <input
-            id="target"
-            type="text"
-            placeholder="0x..."
-            value={target}
-            onChange={(e) => setTarget(e.target.value)}
-            className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2.5 text-sm font-mono text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors"
-            disabled={step !== 'idle' && step !== 'error'}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="queryType" className="block text-sm font-medium text-foreground mb-1.5">
-            Analysis Type
-          </label>
-          <select
-            id="queryType"
-            value={queryType}
-            onChange={(e) => setQueryType(e.target.value as QueryType)}
-            className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors"
-            disabled={step !== 'idle' && step !== 'error'}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* ── Option 1: Try Demo ── */}
+        <div className="rounded-xl border border-border/50 bg-surface/30 p-4 flex flex-col items-center text-center gap-3 transition-all duration-300 hover:border-accent/20 hover:bg-accent/5">
+          <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-foreground">Try Demo</p>
+            <p className="text-[11px] text-muted mt-0.5">See Argos in action without any wallet.</p>
+          </div>
+          <button
+            type="button"
+            onClick={onDemo}
+            disabled={inProgress}
+            className="mt-auto bg-gradient-to-r from-accent to-purple-500 hover:from-accent-hover hover:to-purple-400 disabled:from-accent/40 disabled:to-purple-500/40 text-white font-medium rounded-lg px-5 py-2 text-xs transition-all duration-300 shadow-lg shadow-accent/20 hover:shadow-accent/30 hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:scale-100"
           >
-            <option value="wallet">Wallet</option>
-            <option value="token">Token</option>
-            <option value="contract">Contract</option>
-          </select>
+            Try Demo 🚀
+          </button>
         </div>
 
-        <button
-          type="submit"
-          disabled={currentIdx >= 0}
-          className="w-full bg-accent hover:bg-accent-hover disabled:bg-accent/40 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition-colors disabled:cursor-not-allowed"
-        >
-          {currentIdx >= 0 ? 'Processing...' : 'Analyze — 0.50 USDC'}
-        </button>
-      </form>
+        {/* ── Option 2: Wallet / Form ── */}
+        <div className="rounded-xl border border-border/50 bg-surface/30 p-4 flex flex-col items-center text-center gap-3 transition-all duration-300 hover:border-accent/20 hover:bg-accent/5">
+          {hasEthereum === false ? (
+            <>
+              <div className="w-10 h-10 rounded-xl bg-surface-2 border border-border flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Pay per Query</p>
+                <p className="text-[11px] text-muted mt-0.5">0.50 USDC via x402 micropayments.</p>
+              </div>
+              <div className="group relative mt-auto">
+                <button
+                  type="button"
+                  disabled
+                  className="bg-surface-2 border border-border text-muted font-medium rounded-lg px-5 py-2 text-xs cursor-not-allowed"
+                >
+                  Connect Wallet
+                </button>
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block">
+                  <div className="bg-surface-2 border border-border text-foreground text-[11px] rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
+                    Install MetaMask to pay via x402
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : !walletConnected ? (
+            <>
+              <div className="w-10 h-10 rounded-xl bg-surface-2 border border-border flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Pay per Query</p>
+                <p className="text-[11px] text-muted mt-0.5">0.50 USDC via x402 micropayments.</p>
+              </div>
+              <button
+                type="button"
+                onClick={connectWallet}
+                className="mt-auto bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-5 py-2 text-xs transition-colors"
+              >
+                Connect Wallet
+              </button>
+            </>
+          ) : (
+            <div className="w-full text-left">
+              {walletAddr && (
+                <div className="mb-3 flex items-center gap-2 px-3 py-2 bg-accent/5 border border-accent/20 rounded-lg">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />
+                  <span className="text-[11px] text-muted font-mono truncate">{shortenAddress(walletAddr)}</span>
+                </div>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div>
+                  <label htmlFor="target" className="block text-xs font-medium text-foreground mb-1">
+                    Target Address
+                  </label>
+                  <input
+                    id="target"
+                    type="text"
+                    placeholder="0x..."
+                    value={target}
+                    onChange={(e) => setTarget(e.target.value)}
+                    className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-xs font-mono text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors"
+                    disabled={inProgress}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="queryType" className="block text-xs font-medium text-foreground mb-1">
+                    Analysis Type
+                  </label>
+                  <select
+                    id="queryType"
+                    value={queryType}
+                    onChange={(e) => setQueryType(e.target.value as QueryType)}
+                    className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors"
+                    disabled={inProgress}
+                  >
+                    <option value="wallet">Wallet</option>
+                    <option value="token">Token</option>
+                    <option value="contract">Contract</option>
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  disabled={inProgress}
+                  className="w-full bg-accent hover:bg-accent-hover disabled:bg-accent/40 text-white font-medium rounded-lg px-4 py-2 text-xs transition-colors disabled:cursor-not-allowed"
+                >
+                  {inProgress ? 'Processing...' : 'Analyze — 0.50 USDC'}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
 
-      {currentIdx >= 0 && (
-        <div className="mt-5 space-y-2">
+      {/* Progress Flow */}
+      {inProgress && (
+        <div className="mt-5 space-y-2 border-t border-border/50 pt-4">
           {FLOW_ORDER.map((label, i) => (
             <div key={i} className={`flex items-center gap-2.5 text-sm ${
               i === currentIdx ? 'text-foreground' : i < currentIdx ? 'text-success' : 'text-muted'

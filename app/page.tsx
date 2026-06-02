@@ -192,7 +192,7 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               <div className="lg:col-span-2">
                 <h2 className="text-sm font-medium text-foreground mb-3">New Analysis</h2>
-                <JobForm onJobCreated={handleJobCreated} />
+                <JobForm onJobCreated={handleJobCreated} onDemo={handleDemo} />
               </div>
               <div className="lg:col-span-3">
                 <h2 className="text-sm font-medium text-foreground mb-3">Result</h2>
