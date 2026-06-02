@@ -19,9 +19,17 @@ export default function Home() {
     }).catch(() => {})
   }, [])
 
-  function handleDemo() {
-    setDemoMode(true)
-    setActiveJobId('__demo__')
+  async function handleDemo() {
+    try {
+      const res = await fetch('/api/demo', { method: 'POST' })
+      if (res.ok) {
+        const data = await res.json()
+        setActiveJobId(data.jobId)
+        setDemoMode(true)
+      }
+    } catch {
+      // silent
+    }
   }
 
   function handleNewAnalysis() {
@@ -188,9 +196,7 @@ export default function Home() {
               </div>
               <div className="lg:col-span-3">
                 <h2 className="text-sm font-medium text-foreground mb-3">Result</h2>
-                {activeJobId === '__demo__' ? (
-                  <JobResult key="demo" jobId="__demo__" onDone={() => {}} onNewAnalysis={handleNewAnalysis} isDemo />
-                ) : activeJobId ? (
+                {activeJobId ? (
                   <JobResult key={activeJobId} jobId={activeJobId} onDone={() => {}} onNewAnalysis={handleNewAnalysis} />
                 ) : (
                   <div className="glass-card rounded-xl p-8 flex flex-col items-center justify-center text-center gap-3 transition-all duration-500 hover:border-accent/20">
