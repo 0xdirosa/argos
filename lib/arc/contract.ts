@@ -62,7 +62,7 @@ export async function createJobOnChain(jobId: string, feeUsdc: number) {
     walletId: process.env.CIRCLE_OWNER_WALLET_ID!,
     contractAddress: getContractAddress(),
     abiFunctionSignature: 'createJob(bytes32,uint256)',
-    abiParameters: [jobIdBytes32, feeInSmallestUnit],
+    abiParameters: [jobIdBytes32, feeInSmallestUnit.toString()],
     fee: { type: 'level', config: { feeLevel: 'MEDIUM' } },
   })
 
