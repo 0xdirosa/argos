@@ -11,7 +11,7 @@ import TypeWriter from './components/TypeWriter'
 export default function Home() {
   const [activeJobId, setActiveJobId] = useState<string | null>(null)
   const [demoMode, setDemoMode] = useState(false)
-  const [heroStats, setHeroStats] = useState({ job_count: 0, total_earned: 0 })
+  const [heroStats, setHeroStats] = useState<{ job_count: number; total_earned: number } | null>(null)
 
   useEffect(() => {
     fetch('/api/agent/stats').then(r => r.ok && r.json()).then(d => {
@@ -96,28 +96,30 @@ export default function Home() {
             </Reveal>
 
             {/* Social Proof */}
-            <Reveal delay={450}>
-              <div className="mt-6 flex items-center justify-center gap-6 text-xs text-muted">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-accent font-semibold min-w-[2ch] text-right tabular-nums">
-                    <CountUp end={heroStats.job_count} />
-                  </span>
-                  <span>analyses completed</span>
+            {heroStats && (
+              <Reveal delay={450}>
+                <div className="mt-6 flex items-center justify-center gap-6 text-xs text-muted">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-accent font-semibold min-w-[2ch] text-right tabular-nums">
+                      <CountUp end={heroStats.job_count} />
+                    </span>
+                    <span>analyses completed</span>
+                  </div>
+                  <div className="w-px h-4 bg-border" />
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-accent font-semibold tabular-nums">
+                      <CountUp end={heroStats.total_earned} duration={2000} decimals={2} />
+                    </span>
+                    <span>USDC earned</span>
+                  </div>
+                  <div className="w-px h-4 bg-border hidden sm:block" />
+                  <div className="items-center gap-1.5 hidden sm:flex">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                    <span>Results on-chain</span>
+                  </div>
                 </div>
-                <div className="w-px h-4 bg-border" />
-                <div className="flex items-center gap-1.5">
-                  <span className="text-accent font-semibold tabular-nums">
-                    <CountUp end={heroStats.total_earned} duration={2000} />
-                  </span>
-                  <span>USDC earned</span>
-                </div>
-                <div className="w-px h-4 bg-border hidden sm:block" />
-                <div className="items-center gap-1.5 hidden sm:flex">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                  <span>Results on-chain</span>
-                </div>
-              </div>
-            </Reveal>
+              </Reveal>
+            )}
 
             {/* Demo CTA */}
             <Reveal delay={600}>
