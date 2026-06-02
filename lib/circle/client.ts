@@ -19,16 +19,23 @@ export const arcPublicClient = createPublicClient({
   transport: http(),
 })
 
-export const walletsClient = initiateDeveloperControlledWalletsClient({
-  apiKey: process.env.CIRCLE_API_KEY!,
-  entitySecret: process.env.ENTITY_SECRET!,
-})
+let _walletsClient: ReturnType<typeof initiateDeveloperControlledWalletsClient> | null = null
+
+export function getWalletsClient() {
+  if (!_walletsClient) {
+    _walletsClient = initiateDeveloperControlledWalletsClient({
+      apiKey: process.env.CIRCLE_API_KEY!,
+      entitySecret: process.env.ENTITY_SECRET!,
+    })
+  }
+  return _walletsClient
+}
 
 const TERMINAL = ['COMPLETE', 'FAILED', 'DENIED', 'CANCELLED'] as const
 
 export async function waitTxComplete(txId: string, maxAttempts = 30) {
   for (let i = 0; i < maxAttempts; i++) {
-    const { data } = await walletsClient.getTransaction({ id: txId })
+    const { data } = await getWalletsClient().getTransaction({ id: txId })
     const tx = data?.transaction
     if (!tx) {
       await new Promise(r => setTimeout(r, 2000))

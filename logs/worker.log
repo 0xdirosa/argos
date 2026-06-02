@@ -1,2 +1,12 @@
-◇ injected env (17) from ../argos/.env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-[worker] Starting poll loop at 2026-06-01T17:01:14.997Z
+◇ injected env (17) from ../argos/.env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+[worker] Starting poll loop at 2026-06-02T01:03:08.835Z
+[worker] Processing job cce288db-f63f-48f5-b5f3-cd7f797c86ac...
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] STEP 1/4 — Collecting data for 0x000000000000000000000000000000000000dead (wallet)
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] Collected: {"target":"0x000000000000000000000000000000000000dead","queryType":"wallet","balance":"3688836090614953.50","txCount":0,"isContract":false}
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] STEP 2/4 — Reasoning via Groq AI...
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] Analysis: 3 findings, confidence 92
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] STEP 3/4 — Validating result...
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] Validation passed
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] STEP 4/4 — Storing result hash on-chain...
+[cce288db-f63f-48f5-b5f3-cd7f797c86ac] ❌ Pipeline failed: malformed API key. API key should contain three substrings, separated by a colon. First substring denotes the environment, e.g. TEST_API_KEY. Second substring denotes the ID of the key, e.g. ebb3ad72232624921abc4b162148bb84. Third substring denotes the secret of the key, e.g. 019ef3358ef9cd6d08fc32csfe89a68d. This format only applies to API keys generated after May 2023
+[worker] ✅ Job cce288db-f63f-48f5-b5f3-cd7f797c86ac completed

@@ -1,5 +1,5 @@
 import { keccak256, toHex } from 'viem'
-import { walletsClient, arcPublicClient, waitTxComplete } from '../circle/client'
+import { getWalletsClient, arcPublicClient, waitTxComplete } from '../circle/client'
 import crypto from 'crypto'
 
 const ArgosABI = [
@@ -57,7 +57,7 @@ export async function createJobOnChain(jobId: string, feeUsdc: number) {
   const jobIdBytes32 = keccak256(toHex(jobId))
   const feeInSmallestUnit = BigInt(Math.round(feeUsdc * 1_000_000))
 
-  const { data } = await walletsClient.createContractExecutionTransaction({
+  const { data } = await getWalletsClient().createContractExecutionTransaction({
     idempotencyKey: crypto.randomUUID(),
     walletId: process.env.CIRCLE_OWNER_WALLET_ID!,
     contractAddress: getContractAddress(),
@@ -75,7 +75,7 @@ export async function settleJobOnChain(jobId: string, resultJson: string) {
   const jobIdBytes32 = keccak256(toHex(jobId))
   const resultHash = keccak256(toHex(resultJson))
 
-  const { data } = await walletsClient.createContractExecutionTransaction({
+  const { data } = await getWalletsClient().createContractExecutionTransaction({
     idempotencyKey: crypto.randomUUID(),
     walletId: process.env.CIRCLE_VALIDATOR_WALLET_ID!,
     contractAddress: getContractAddress(),
@@ -92,7 +92,7 @@ export async function settleJobOnChain(jobId: string, resultJson: string) {
 export async function failJobOnChain(jobId: string, reason: string) {
   const jobIdBytes32 = keccak256(toHex(jobId))
 
-  const { data } = await walletsClient.createContractExecutionTransaction({
+  const { data } = await getWalletsClient().createContractExecutionTransaction({
     idempotencyKey: crypto.randomUUID(),
     walletId: process.env.CIRCLE_VALIDATOR_WALLET_ID!,
     contractAddress: getContractAddress(),
