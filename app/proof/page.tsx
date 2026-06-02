@@ -44,8 +44,9 @@ export default function ProofPage() {
             <span className="font-semibold text-base tracking-tight">Argos</span>
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-muted hover:text-foreground transition-colors">Dashboard</Link>
             <Link href="/about" className="text-muted hover:text-foreground transition-colors">About</Link>
+            <span className="text-foreground font-medium">On-Chain Proof</span>
+            <Link href="/" className="text-muted hover:text-foreground transition-colors">Dashboard</Link>
           </nav>
         </div>
       </header>
@@ -129,6 +130,15 @@ export default function ProofPage() {
             Owner: <span className="font-mono">0x6fa042...069e3</span> &middot;
             Validator: <span className="font-mono">0xfef84f...8886e</span>
           </p>
+        </div>
+
+        <div className="text-center mt-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-accent to-purple-500 hover:from-accent-hover hover:to-purple-400 text-white font-medium rounded-lg px-6 py-3 text-sm transition-all duration-300 hover:scale-105 shadow-lg shadow-accent/20"
+          >
+            Try Live Demo →
+          </Link>
         </div>
       </main>
 

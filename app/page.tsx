@@ -58,9 +58,16 @@ export default function Home() {
             <div>
               <span className="font-bold text-base tracking-tight text-foreground">Argos</span>
               <span className="text-[10px] text-muted ml-2 font-mono">x402 Agent</span>
+              </div>
+              <div className="mt-6 text-center">
+                <a href="/about" className="text-xs text-accent hover:text-accent-hover transition-colors">
+                  Learn more about Argos →
+                </a>
+              </div>
             </div>
-          </div>
           <nav className="flex items-center gap-3">
+            <a href="/about" className="text-xs text-muted hover:text-foreground transition-colors hidden sm:inline">About</a>
+            <a href="/proof" className="text-xs text-muted hover:text-foreground transition-colors hidden sm:inline">On-Chain Proof</a>
             <span className="text-xs text-muted hidden sm:inline">Arc Testnet</span>
             <span className="w-1.5 h-1.5 rounded-full bg-success animate-[pulse-dot_2s_ease-in-out_infinite]" />
           </nav>

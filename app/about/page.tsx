@@ -16,8 +16,9 @@ export default function AboutPage() {
             <span className="font-semibold text-base tracking-tight">Argos</span>
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-muted hover:text-foreground transition-colors">Dashboard</Link>
+            <span className="text-foreground font-medium">About</span>
             <Link href="/proof" className="text-muted hover:text-foreground transition-colors">On-Chain Proof</Link>
+            <Link href="/" className="text-muted hover:text-foreground transition-colors">Dashboard</Link>
           </nav>
         </div>
       </header>
@@ -78,6 +79,15 @@ export default function AboutPage() {
             GitHub Repo
           </a>
         </section>
+
+        <div className="text-center">
+          <Link
+            href="/proof"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-medium rounded-lg px-6 py-3 text-sm transition-all duration-300 hover:scale-105"
+          >
+            See On-Chain Proof →
+          </Link>
+        </div>
       </main>
 
       <footer className="border-t border-border py-4 mt-12">
