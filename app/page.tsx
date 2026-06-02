@@ -98,7 +98,8 @@ export default function Home() {
             <Reveal delay={300}>
               <p className="mt-4 text-muted text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
                 AI-powered analysis for Arc Testnet wallets, tokens, and contracts.
-                No subscription. No gas. Just <strong className="text-foreground">0.50 USDC</strong> per analysis via x402.
+                Powered by <strong className="text-foreground">Circle Agent Stack</strong> — pay-per-query via x402 micropayments
+                with <strong className="text-foreground">Circle Gateway</strong>. No subscription needed.
               </p>
             </Reveal>
 
@@ -208,12 +209,20 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-border/50 py-4">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
           <p className="text-xs text-muted">Argos — x402 Agent on Arc Testnet</p>
           <div className="flex items-center gap-3">
             <a href="/about" className="text-xs text-muted hover:text-foreground transition-colors">About</a>
             <a href="/proof" className="text-xs text-muted hover:text-foreground transition-colors">On-Chain Proof</a>
           </div>
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-2 pt-2 border-t border-border/30 flex items-center justify-center gap-1.5 text-[11px] text-muted">
+          <span>Built on</span>
+          <a href="https://developers.circle.com/agent-stack" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-hover underline underline-offset-2">Circle Agent Stack</a>
+          <span>·</span>
+          <a href="https://docs.arc.io" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-hover underline underline-offset-2">Arc Testnet</a>
+          <span>·</span>
+          <a href="https://testnet.arcscan.app/address/0xe19b55f5f8da0af5ecdbf351ba3e672698242bac" target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-hover underline underline-offset-2">ERC-8004</a>
         </div>
       </footer>
     </div>
@@ -222,7 +231,7 @@ export default function Home() {
 
 const steps = [
   { icon: '🔗', title: 'Connect Wallet', desc: 'MetaMask or any EIP-1193 wallet' },
-  { icon: '💸', title: 'Pay 0.50 USDC', desc: 'Gasless via Circle x402 batch' },
+  { icon: '💸', title: 'Pay 0.50 USDC', desc: 'Gasless via Circle Gateway & Agent Stack' },
   { icon: '🧠', title: 'AI Analysis', desc: 'Groq llama-3.1-8b-instant' },
   { icon: '⛓️', title: 'On-Chain Proof', desc: 'Result hash stored on Arc' },
 ]
